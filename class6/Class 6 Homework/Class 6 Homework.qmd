@@ -1,0 +1,55 @@
+---
+title: "Class 6 Homework"
+author: "Anisa Mody (PID: A19145291)"
+format: pdf
+---
+
+## Protein B-factor Analysis Function
+
+Q6. How would you generalize the original code above to work with any set of input
+protein structures?
+Write your own function starting from the code above that analyzes protein drug
+interactions by reading in any protein PDB data and outputs a plot for the specified
+protein.
+
+Explanation: This function generalizes the original repeated code so it can analyze any protein structure from the PDB. The function takes a PDB ID as input, reads the structure, trims it to a specified chain and atom type, extracts B-factor values, and generates a plot. This approach improves efficiency by removing duplicated code and making the analysis reusable for multiple proteins.
+
+```{r}
+library(bio3d)
+
+## Function to analyze protein B-factors
+plot_pdb_bfactor <- function(pdb_id, chain = "A", elety = "CA") {
+  
+  ## INPUTS:
+  ## pdb_id: character string of the PDB ID (e.g., "4AKE")
+  ## chain: chain identifier (default = "A")
+  ## elety: atom type (default = "CA")
+  
+  ## Read PDB structure
+  pdb <- read.pdb(pdb_id)
+  
+  ## Trim to selected chain and atom type
+  pdb_trim <- trim.pdb(pdb, chain = chain, elety = elety)
+  
+  ## Extract B-factor values
+  bvals <- pdb_trim$atom$b
+  
+  ## Plot B-factors
+  plotb3(bvals, sse = pdb_trim, typ = "l",
+         ylab = "B-factor",
+         main = paste("B-factor plot for", pdb_id))
+  
+  ## OUTPUT:
+  ## Returns a numeric vector of B-factor values
+  return(bvals)
+}
+```
+
+Example Use:
+
+```{r}
+plot_pdb_bfactor("4AKE")
+plot_pdb_bfactor("1AKE")
+plot_pdb_bfactor("1E4Y")
+```
+
