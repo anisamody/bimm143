@@ -1,0 +1,107 @@
+---
+title: "Class 12: Genome Informatics"
+author: "Anisa Mody (PID: A19145291)"
+format: pdf
+toc: TRUE
+---
+
+## Section 1. Proportion of G/G in a Population 
+
+Imported a CSV file from Ensembl < https://www.ensembl.org/Homo_sapiens/Variation/Sample?db=core;r=17:39894595-39895595;v=rs8067378;vdb=variation;vf=959672880#373531_tablePanel > 
+
+Here we will read in this CSV file:
+
+```{r}
+mxl <- read.csv("373531-SampleGenotypes-Homo_sapiens_Variation_Sample_rs8067378.csv")
+
+head(mxl)
+```
+
+```{r}
+table(mxl$Genotype..forward.strand.)
+```
+
+> Question 5. What proportion of the Mexican Ancestry in Los Angeles sample population (MXL) are homozygous for the asthma associated SNP (G|G)? 
+
+```{r}
+table(mxl$Genotype..forward.strand.) / nrow(mxl) * 100
+```
+
+**14.0625%** of the Mexican Ancestry in Los Angeles sample population (MXL) are homozygous for the asthma associated SNP (G|G).
+
+> Question 6. Now let's look at a different population, which is GBR (Great Britain), as stated in the lab sheet.
+
+```{r}
+gbr <- read.csv("373522-SampleGenotypes-Homo_sapiens_Variation_Sample_rs8067378.csv")
+gbr
+```
+
+> Find proportion of G|G
+
+```{r}
+round(table(gbr$Genotype..forward.strand.) / nrow(gbr) * 100, 2)
+```
+
+Based on these results, it can be indicated that this variant, which is associated with childhood asthma, is more frequently found in the GBR population than in the MXL population. 
+
+## Section 4: Population Scale Analysis [HOMEWORK]
+
+> Question 13. Read this file into R and determine the sample size for each genotype and their corresponding median expression levels for each of these genotypes. 
+
+*Hint: The read.table(), summary() and boxplot() functions will likely be useful here. There is an example R script online to be used ONLY if you are struggling in vein. Note that you can find the medium value from saving the output of the boxplot() function to an R object and examining this object. There is also the medium() and summary() function that you can use to check your understanding.*
+
+
+```{r}
+expr <- read.table("rs8067378_ENSG00000172057.6.txt")
+head(expr)
+```
+
+**Total**
+
+```{r}
+nrow(expr)
+```
+
+**Sample Sizes for Each Genotype**
+
+```{r}
+table(expr$geno)
+```
+
+**Median Expression Levels**
+
+```{r}
+colnames(expr) 
+tapply(expr$exp, expr$geno, median)
+
+```
+
+These results show that there are 233 A|G genotypes, 108 A|A genotypes, and 121 G|G genotypes, which makes for a total of 462 genotypes. The median expression level is 31.248 for A|A, 25.064 for A|G, and 20.074 for G|G.
+
+> Question 14. Generate a boxplot with a box per genotype, what could you infer from the relative expression value between A/A and G/G displayed in this plot? Does the SNP effect the expression of ORMDL3?
+
+```{r}
+library(ggplot2)
+```
+
+```{r}
+ggplot(expr) +
+  aes(x = geno, y = exp, fill = geno) +
+  geom_boxplot(notch = TRUE) +
+  scale_fill_manual(values = c(
+    "A/A" = "lightpink",
+    "A/G" = "lightyellow",
+    "G/G" = "lightblue"
+  )) +
+  labs(
+    title = "ORMDL3 Expression by Genotype",
+    x = "Genotype",
+    y = "Expression Level"
+  ) +
+  theme_minimal()
+```
+
+Analysis: The boxplot illustrates the distribution of ORMDL3 gene expression levels across the three genotypes: A/A, A/G, and G/G. The A/A genotype shows the highest median expression, A/G displays intermediate expression, and G/G has the lowest median expression, suggesting that the presence of the G allele is associated with progressively reduced ORMDL3 expression. Differences in spread and outliers among the groups indicate variation within each genotype, but the overall downward trend supports a potential functional effect of this SNP on gene regulation and expression levels.
+
+
+

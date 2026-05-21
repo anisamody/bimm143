@@ -1,0 +1,197 @@
+---
+title: "Class 11: AlphaFold"
+author: "Anisa Mody (PID: A19145291)"
+format: pdf
+toc: TRUE
+---
+
+## Background
+In this hands-on session we will utilize **AlphaFold** to predict protein structure from sequence (Jumper et al. 2021).
+
+## Custom Analysis of Resulting Models
+
+```{r}
+library(bio3d)
+
+pdb <- read.pdb("HIVPrDimer_23119_unrelaxed_rank_001_alphafold2_multimer_v3_model_4_seed_000.pdb")
+
+pdb
+```
+
+Make a vector of input PDB file names that we can read into R:
+
+```{r}
+pdb_files <- list.files("HIVPrDimer_23119",
+pattern =".pdb",
+full.names = TRUE)
+basename(pdb_files)
+```
+
+```{r}
+# Read all data from Models and superpose/fit coords
+
+pdbs <- pdbaln(pdb_files, fit=TRUE, exefile="msa")
+```
+
+```{r}
+pdbs
+```
+
+```{r}
+rd <- rmsd(pdbs, fit=T)
+```
+
+```{r}
+range(rd)
+```
+
+```{r}
+library(pheatmap)
+colnames(rd) <- paste0("m",1:4)
+rownames(rd) <- paste0("m",1:4)
+pheatmap(rd)
+```
+
+The RMSD heatmap compares structural similarity among the four AlphaFold models. Lower RMSD values indicate models with more similar predicted structures, while higher RMSD values reflect greater structural differences between the models. The clustering pattern suggests that models m1 and m2 are most similar to each other, as are models m3 and m4, forming two major structural groups.
+
+```{r}
+pdb <- read.pdb("1hsg")
+```
+
+```{r}
+plotb3(pdbs$b[1,], typ="l", lwd=2, sse=pdb)
+
+points(pdbs$b[2,], typ="l", col="deeppink")
+points(pdbs$b[3,], typ="l", col="turquoise")
+points(pdbs$b[4,], typ="l", col="coral")
+abline(v=100, col="gray")
+```
+
+The pLDDT plot illustrates AlphaFold confidence scores across residue positions for the four predicted models. Higher pLDDT values indicate regions of greater structural confidence, while lower values suggest areas of reduced prediction reliability or increased flexibility. Overall, most residues show high confidence, with noticeable drops in specific regions that may correspond to flexible loops, domain boundaries, or structurally uncertain segments.
+
+```{r}
+core <- core.find(pdbs)
+```
+
+```{r}
+core.inds <- print(core, vol=0.5)
+```
+
+```{r}
+xyz <- pdbfit(pdbs, core.inds, outpath="corefit_structures")
+```
+
+```{r}
+rf <- rmsf(xyz)
+plotb3(rf, sse=pdb)
+abline(v=100, col="hotpink", ylab="RMSF")
+```
+
+The RMSF plot shows residue flexibility across the fitted AlphaFold models. Higher RMSF values indicate more flexible regions, while lower values represent more stable areas. Residues after position 100 show greater flexibility, suggesting increased structural variation in the second half of the protein.
+
+## Predicted Alignment Error for Domains
+
+```{r}
+library(jsonlite)
+
+# Listing all PAE JSON files from the AlphaFold folder
+results_dir <- "HIVPrDimer_23119/"
+
+pae_files <- list.files(path = results_dir,
+                        pattern = ".*scores.*\\.json",
+                        full.names = TRUE)
+
+basename(pae_files)
+
+# Read first and last available PAE files
+pae1 <- read_json(pae_files[1], simplifyVector = TRUE)
+pae4 <- read_json(pae_files[length(pae_files)], simplifyVector = TRUE)
+
+attributes(pae1)
+```
+
+```{r}
+# Per-residue pLDDT scores
+# same as B-factor of PDB..
+head(pae1$plddt)
+```
+
+```{r}
+pae1$max_pae
+```
+
+```{r}
+pae4$max_pae
+```
+
+The maximum PAE values compare prediction uncertainty between the AlphaFold models. Lower max PAE values indicate greater model reliability, while higher values suggest increased uncertainty. In this case, model 1 has lower predicted alignment error than model 4, making model 1 the more reliable structural prediction.
+
+## Comparing PAE Plots
+
+```{r}
+plot.dmat(pae1$pae,
+xlab="Residue Position (i)",
+ylab="Residue Position (j)")
+```
+
+```{r}
+plot.dmat(pae4$pae,
+xlab="Residue Position (i)",
+ylab="Residue Position (j)",
+grid.col = "black",
+zlim=c(0,30))
+```
+
+```{r}
+plot.dmat(pae1$pae,
+xlab="Residue Position (i)",
+ylab="Residue Position (j)",
+grid.col = "black",
+zlim=c(0,30))
+```
+
+The PAE plots compare predicted alignment confidence between residue pairs for different AlphaFold models. The Model 1 plot shows mostly low PAE values (dark blue), indicating higher confidence and more reliable domain positioning across the structure. In contrast, Model 4 displays substantially higher PAE values (lighter colors and red regions), especially between major residue blocks, suggesting greater uncertainty in domain arrangement and inter-domain orientation. Overall, Model 1 appears structurally more reliable, while Model 4 shows increased prediction uncertainty and less confident large-scale organization.
+
+## Residue Conservation from Alignment File
+
+```{r}
+aln_file <- list.files(path=results_dir,
+pattern=".a3m$",
+full.names = TRUE)
+aln_file
+```
+
+```{r}
+aln <- read.fasta(aln_file[1], to.upper = TRUE)
+```
+
+```{r}
+dim(aln$ali)
+```
+
+```{r}
+sim <- conserv(aln)
+plotb3(sim[1:99], sse=trim.pdb(pdb, chain="A"),
+ylab="Conservation Score")
+```
+
+The conservation plot shows how strongly each residue is preserved across related sequences, with higher conservation scores indicating positions that are more evolutionarily important or functionally constrained. Regions with higher conservation are often associated with critical structural or functional roles, while lower conservation suggests more variable or flexible residues.
+
+```{r}
+con <- consensus(aln, cutoff = 0.9)
+con$seq
+```
+
+```{r}
+m1.pdb <- read.pdb(pdb_files[1])
+# uses conservation scores for all residues in the model
+sim2 <- rep(sim[1:99], 2)
+# map residue conservation scores onto every atom
+occ <- sim2[match(m1.pdb$atom$resno, sort(unique(m1.pdb$atom$resno)))]
+# write new PDB file for Mol Star
+write.pdb(m1.pdb, o = occ, file = "m1_conserv.pdb")
+m1.pdb
+```
+
+The conservation scores were successfully mapped onto the HIV protease structure and written into a new PDB file for structural visualization. This allows conserved residues to be displayed directly on the 3D model, helping identify functionally or structurally important regions. Highly conserved areas are likely associated with critical biological roles, such as active sites or structurally essential domains.
+
