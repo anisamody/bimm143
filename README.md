@@ -14,3 +14,13 @@ This repository contains my classwork from [BIMM143 at UC San Diego Spring 2026]
 [Class 8](class8/lab8.html): Unsupervised Learning Mini-Project
 
 [Class 9](class9/class9.html): Candy Mini-Project
+
+[Class 10](class10/class_10_lab.html): Structural Bioinformatics (Part 1)
+
+[Class 11](class11/lab_11.html): Structural Bioinformatics (Part 2. Focus on new AlphaFold2)
+
+[Class 12](class12/class_12_lab.html): Genome Informatics
+
+[Class 13](class13/class_13_lab.html): Transcriptomics and the Analysis of RNA-Seq Data
+
+[Class 14](class14/class_14_lab.html): RNA-Seq Analysis Mini-project
