@@ -1,0 +1,46 @@
+---
+title: "class16"
+author: "Anisa Mody"
+date: "2026-05-21"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(readr)
+```
+
+
+```{r}
+library(readr)
+
+blast <- read_tsv(
+  "../class16/mm-second.x.zebrafish.tsv",
+  col_names = c(
+    "qseqid","sseqid","pident","length",
+    "mismatch","gapopen","qstart","qend",
+    "sstart","send","evalue","bitscore"
+  )
+)
+
+head(blast)
+```
+
+```{r}
+hist(blast$bitscore, breaks=30)
+```
+
+```{r}
+plot(
+  blast$pident * (blast$qend - blast$qstart),
+  blast$bitscore
+)
+```
+
+```{r}
+library(ggplot2)
+
+ggplot(blast, aes(pident, bitscore)) +
+  geom_point(alpha=0.1)
+```
+
+
