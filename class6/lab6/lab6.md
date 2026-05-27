@@ -121,14 +121,14 @@ A useful function here is the “base R” `sample()` function:
 sample(1:5, size = 3)
 ```
 
-    [1] 2 1 4
+    [1] 3 5 4
 
 ``` r
 sample(1:5, size = 60, replace = TRUE)
 ```
 
-     [1] 5 4 5 1 5 1 4 1 4 5 4 1 4 4 3 3 1 5 3 2 5 4 3 4 3 5 5 4 2 5 2 5 1 2 3 4 3 1
-    [39] 2 1 2 3 5 3 5 1 4 2 4 5 4 2 1 4 3 4 5 1 4 1
+     [1] 3 4 2 3 1 4 4 3 2 1 3 5 1 4 5 3 5 2 1 4 5 2 2 2 5 1 4 1 1 1 1 2 3 3 2 3 4 1
+    [39] 1 1 2 1 4 2 3 2 4 5 1 4 5 5 3 4 2 4 5 5 1 2
 
 We can use this to make a random nucleotide sequence if we draw from
 “A”, “C”, “G” and “T”…
@@ -137,7 +137,7 @@ We can use this to make a random nucleotide sequence if we draw from
 sample(x = c("A", "C", "T", "G"), size = 10, replace = TRUE)
 ```
 
-     [1] "A" "C" "C" "C" "T" "T" "T" "C" "A" "G"
+     [1] "A" "G" "T" "T" "C" "G" "C" "C" "C" "A"
 
 Question 2a. Your first version should return a multi-element vector of
 single character nucleotides. For example generate_dna(6) might return
@@ -163,7 +163,7 @@ generate_dna <- function(len) {
 generate_dna(len = 10)
 ```
 
-     [1] "T" "A" "T" "C" "C" "C" "T" "A" "G" "C"
+     [1] "A" "C" "C" "C" "A" "G" "C" "G" "T" "C"
 
 Question 2b. Your second version should optionally be able to return
 either a multi-element vector of single character nucleotides (as
@@ -204,13 +204,13 @@ generate_dna <- function(len=10, single.element = TRUE) {
 generate_dna()
 ```
 
-    [1] "CGAGCTTTTG"
+    [1] "GATAGCACTA"
 
 ``` r
 generate_dna(single.element = TRUE)
 ```
 
-    [1] "TGGTACGTAC"
+    [1] "GCCGCGTTTG"
 
 Question 2c. Finally, create a final version of your function that
 prints out a FASTA format sequence with an id line indicating the
@@ -259,7 +259,7 @@ x <- generate_dna(10)
 ```
 
     >len 10 someid
-    TTGGAATTTG
+    GTACTAGACT
 
 **Section 3) Write a generate_protein() function**
 
@@ -306,7 +306,7 @@ x <- generate_protein(10)
 ```
 
     >len 10 someid
-    IQAEVPDEEC
+    EYQAYVWHGM
 
 **Section 4) Generate random protein sequences of length 6 to 13**
 
@@ -350,21 +350,21 @@ for(i in 6:13) {
 ```
 
     >id.6
-    TSRAFQ 
+    MFVVMN 
     >id.7
-    CKCFLFA 
+    LWHQPQY 
     >id.8
-    VNPGKSKR 
+    YVGKRKAE 
     >id.9
-    CEWNLEPVR 
+    EIGGYCDTP 
     >id.10
-    CCDWQMEGCR 
+    FMTRWQWKGD 
     >id.11
-    NFWPDQPAAHN 
+    DDLDAWQGGEW 
     >id.12
-    DKCAYTWTHYNW 
+    SMTAKLQWNMWS 
     >id.13
-    MHSRTVVWSVCAY 
+    WTGIQCWCNCHDF 
 
 **Section 5) BLASTp search against nr — are your peptides “unique in
 nature”?**

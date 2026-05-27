@@ -380,8 +380,8 @@ adk
 m <- nma(adk)
 ```
 
-     Building Hessian...        Done in 0.008 seconds.
-     Diagonalizing Hessian...   Done in 0.181 seconds.
+     Building Hessian...        Done in 0.01 seconds.
+     Diagonalizing Hessian...   Done in 0.178 seconds.
 
 ``` r
 plot(m)
@@ -478,8 +478,8 @@ Search for any related sequences in the database:
 blast <- blast.pdb(aa)
 ```
 
-     Searching ... please wait (updates every 5 seconds) RID = 1BXEK81C014 
-     .............
+     Searching ... please wait (updates every 5 seconds) RID = 1ES4KWV8014 
+     ...........
      Reporting 96 hits
 
 ``` r
@@ -487,12 +487,12 @@ head(blast$hit.tbl)
 ```
 
             queryid subjectids identity alignmentlength mismatches gapopens q.start
-    1 Query_8182497     1AKE_A  100.000             214          0        0       1
-    2 Query_8182497     8BQF_A   99.533             214          1        0       1
-    3 Query_8182497     4X8M_A   99.533             214          1        0       1
-    4 Query_8182497     6S36_A   99.533             214          1        0       1
-    5 Query_8182497     9R6U_A   99.533             214          1        0       1
-    6 Query_8182497     9R71_A   99.533             214          1        0       1
+    1 Query_7550537     1AKE_A  100.000             214          0        0       1
+    2 Query_7550537     8BQF_A   99.533             214          1        0       1
+    3 Query_7550537     4X8M_A   99.533             214          1        0       1
+    4 Query_7550537     6S36_A   99.533             214          1        0       1
+    5 Query_7550537     9R6U_A   99.533             214          1        0       1
+    6 Query_7550537     9R71_A   99.533             214          1        0       1
       q.end s.start s.end    evalue bitscore positives mlog.evalue pdb.id    acc
     1   214       1   214 1.82e-156      432    100.00    358.6044 1AKE_A 1AKE_A
     2   214      21   234 2.98e-156      433    100.00    358.1114 8BQF_A 8BQF_A
