@@ -13,7 +13,7 @@ This repository contains my classwork from [BIMM143 at UC San Diego Spring 2026]
 
 [Class 8](class8/lab8.md): Unsupervised Learning Mini-Project
 
-[Class 9](class9/class 9.md): Candy Mini-Project
+[Class 9](class9/class9.md): Candy Mini-Project
 
 [Class 10](class10/class_10_lab.md): Structural Bioinformatics (Part 1)
 
