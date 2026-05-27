@@ -1,0 +1,17 @@
+---
+---
+
+@import "{{ site.theme }}";
+
+body {
+  background: black !important;
+  color: #ff1493 !important;
+}
+
+h1, h2, h3, p, li {
+  color: #ff1493 !important;
+}
+
+a {
+  color: #ff69b4 !important;
+}
