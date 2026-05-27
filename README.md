@@ -1,25 +1,3 @@
-h2 {
-  color: #ff69b4;
-}
-
-a {
-  color: #d63384;
-  font-weight: bold;
-}
-
-a:hover {
-  color: #ff1493;
-}
-
-img {
-  border-radius: 20px;
-}
-</style>
-
-<p align="center">
-  <img src="images/bioinfo.png" width="300">
-</p>
-
 # Bioinformatics Class
 This repository contains my classwork from [BIMM143 at UC San Diego Spring 2026] 
 
