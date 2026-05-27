@@ -19,8 +19,8 @@ This repository contains my classwork from [BIMM143 at UC San Diego Spring 2026]
 
 [Class 11](class11/lab_11.md): Structural Bioinformatics (Part 2. Focus on new AlphaFold2)
 
-[Class 12](class12/Class_12_lab.md): Genome Informatics
+[Class 12](class12/class_12_lab.md): Genome Informatics
 
-[Class 13](class13/Class_13_lab.md): Transcriptomics and the Analysis of RNA-Seq Data
+[Class 13](class13/class_13_lab.md): Transcriptomics and the Analysis of RNA-Seq Data
 
-[Class 14](class14/Class_14_lab.md): RNA-Seq Analysis Mini-project
+[Class 14](class14/class_14_lab.md): RNA-Seq Analysis Mini-project
